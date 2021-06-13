@@ -2,7 +2,6 @@ package dk.thelazydev.kotlix.serialization.ion
 
 import dk.thelazydev.kotlix.serialization.ion.model.Storage
 import kotlinx.serialization.ExperimentalSerializationApi
-import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -13,18 +12,9 @@ class SimpleCollectionTest {
     private val ion = Ion()
 
     @Test
-    fun `Test nullable JSON encode`() {
-        val file = tempFile()
-        ion.encodeJson(storages, file.outputStream())
-        val decoded = ion.decode<List<Storage>>(file.inputStream())
-
-        assertEquals(storages, decoded)
-    }
-
-    @Test
     fun `Test nullable Binary encode`() {
         val file = tempFile()
-        ion.encodeBinary(storages, file.outputStream())
+        ion.encode(storages, file.outputStream())
         val decoded = ion.decode<List<Storage>>(file.inputStream())
 
         assertEquals(storages, decoded)

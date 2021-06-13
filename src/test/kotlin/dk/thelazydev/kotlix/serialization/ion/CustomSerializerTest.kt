@@ -15,7 +15,7 @@ class CustomSerializerTest {
     fun `Test custom serializer non-null encode`() {
         val storage = ZonedDateTimeStorage(ZonedDateTime.now())
         val file = tempFile()
-        ion.encodeJson(storage, file.outputStream())
+        ion.encode(storage, file.outputStream())
         val decoded = ion.decode<ZonedDateTimeStorage>(file.inputStream())
 
         assertEquals(storage, decoded)
@@ -25,7 +25,7 @@ class CustomSerializerTest {
     fun `Test custom serializer nullable encode`() {
         val storage = ZonedDateTimeStorage(null)
         val file = tempFile()
-        ion.encodeJson(storage, file.outputStream())
+        ion.encode(storage, file.outputStream())
         val decoded = ion.decode<ZonedDateTimeStorage>(file.inputStream())
 
         assertEquals(storage, decoded)

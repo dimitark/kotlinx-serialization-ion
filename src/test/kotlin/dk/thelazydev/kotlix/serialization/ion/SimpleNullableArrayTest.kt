@@ -12,18 +12,9 @@ class SimpleNullableArrayTest {
     private val ion = Ion()
 
     @Test
-    fun `Simple non-null JSON array`() {
+    fun `Simple non-null array`() {
         val file = tempFile()
-        ion.encodeJson(storage, file.outputStream())
-        val decoded = ion.decode<NullableArrayStorage>(file.inputStream())
-
-        assertEquals(storage, decoded)
-    }
-
-    @Test
-    fun `Simple non-null Binary array`() {
-        val file = tempFile()
-        ion.encodeBinary(storage, file.outputStream())
+        ion.encode(storage, file.outputStream())
         val decoded = ion.decode<NullableArrayStorage>(file.inputStream())
 
         assertEquals(storage, decoded)

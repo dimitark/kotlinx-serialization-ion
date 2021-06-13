@@ -1,6 +1,9 @@
 package dk.thelazydev.kotlix.serialization.ion
 
-import dk.thelazydev.kotlix.serialization.ion.model.*
+import dk.thelazydev.kotlix.serialization.ion.model.Employee
+import dk.thelazydev.kotlix.serialization.ion.model.EmployeePosition
+import dk.thelazydev.kotlix.serialization.ion.model.Person
+import dk.thelazydev.kotlix.serialization.ion.model.Student
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -27,27 +30,18 @@ class OpenPolymorphismTest {
     private val ion = Ion { serializersModule = module }
 
     @Test
-    fun `Test open polymorphism single object JSON encode`() {
+    fun `Test open polymorphism single object encode`() {
         val file = tempFile()
-        ion.encodeJson(student, file.outputStream())
+        ion.encode(student, file.outputStream())
         val decoded = ion.decode<Person>(file.inputStream())
 
         assertEquals(student, decoded)
     }
 
     @Test
-    fun `Test open polymorphism JSON encode`() {
+    fun `Test open polymorphism list of objects encode`() {
         val file = tempFile()
-        ion.encodeJson(persons, file.outputStream())
-        val decoded = ion.decode<List<Person>>(file.inputStream())
-
-        assertEquals(persons, decoded)
-    }
-
-    @Test
-    fun `Test open polymorphism Binary encode`() {
-        val file = tempFile()
-        ion.encodeBinary(persons, file.outputStream())
+        ion.encode(persons, file.outputStream())
         val decoded = ion.decode<List<Person>>(file.inputStream())
 
         assertEquals(persons, decoded)

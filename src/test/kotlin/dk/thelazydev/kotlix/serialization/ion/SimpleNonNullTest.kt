@@ -12,18 +12,9 @@ class SimpleNonNullTest {
     private val ion = Ion()
 
     @Test
-    fun `Test non-null JSON encode`() {
+    fun `Test non-null encode`() {
         val file = tempFile()
-        ion.encodeJson(storage, file.outputStream())
-        val decoded = ion.decode<Storage>(file.inputStream())
-
-        assertEquals(storage, decoded)
-    }
-
-    @Test
-    fun `Test non-null Binary encode`() {
-        val file = tempFile()
-        ion.encodeBinary(storage, file.outputStream())
+        ion.encode(storage, file.outputStream())
         val decoded = ion.decode<Storage>(file.inputStream())
 
         assertEquals(storage, decoded)

@@ -1,5 +1,8 @@
 # Kotlin Serialization implementation for Amazon Ion's serialization format
 
+Serialization and deserialization to a flat binary file, using Kotlin's serialization framework. 
+The binary file doesn't contain the object structure, only the raw data.
+
 ## Usage
 
 ```kotlin
@@ -12,13 +15,9 @@ data class Storage(private val id: String, private val name: String, private val
 private val ion = Ion()
 private val storage = Storage("uuid", "Storage00", null)
 
-// Encode JSON
+// Encode
 val file = File(...)
-ion.encodeJson(storage, file.outputStream())
-
-// Encode Binary
-val file = File(...)
-ion.encodeBinary(storage, file.outputStream())
+ion.encode(storage, file.outputStream())
 
 // Decode
 val file = File(...)

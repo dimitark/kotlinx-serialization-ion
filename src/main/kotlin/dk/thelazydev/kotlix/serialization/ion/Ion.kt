@@ -22,7 +22,7 @@ fun Ion(builder: (IonConfig.() -> Unit)? = null): IonSerializer {
 class IonConfig(var serializersModule: SerializersModule = EmptySerializersModule)
 
 @ExperimentalSerializationApi
-class IonSerializer(private val config: IonConfig) {
+class IonSerializer internal constructor(private val config: IonConfig) {
 
     inline fun <reified T> encode(value: T, outputStream: OutputStream) = encode(serializer(), value, outputStream)
     inline fun <reified T> decode(inputStream: InputStream): T = decode(serializer(), inputStream)

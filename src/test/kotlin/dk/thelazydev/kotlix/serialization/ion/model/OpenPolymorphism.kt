@@ -10,11 +10,11 @@ interface Person {
 }
 
 @Serializable
-@SerialName("studentSubclass")
+@SerialName("student")
 data class Student(override val id: String, override val name: String, override val age: Int?, private val course: String) : Person
 
 @Serializable
-@SerialName("employeeSubclass")
+@SerialName("employee")
 data class Employee(override val id: String, override val name: String, override val age: Int?, private val position: EmployeePosition) : Person
 
 enum class EmployeePosition { Junior, Senior }

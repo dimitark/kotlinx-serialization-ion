@@ -7,26 +7,26 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @ExperimentalSerializationApi
-class SimpleNullableTest {
+class SimpleCollectionTest {
 
-    private val storage = Storage("uuid", "Storage00", null)
+    private val storages = listOf(Storage("uuid", "Storage00", null), Storage("uuid-2", "Storage01", 42))
     private val ion = Ion()
 
     @Test
     fun `Test nullable JSON encode`() {
         val file = tempFile()
-        ion.encodeJson(storage, file.outputStream())
-        val decoded = ion.decode<Storage>(file.inputStream())
+        ion.encodeJson(storages, file.outputStream())
+        val decoded = ion.decode<List<Storage>>(file.inputStream())
 
-        assertEquals(storage, decoded)
+        assertEquals(storages, decoded)
     }
 
     @Test
     fun `Test nullable Binary encode`() {
         val file = tempFile()
-        ion.encodeBinary(storage, file.outputStream())
-        val decoded = ion.decode<Storage>(file.inputStream())
+        ion.encodeBinary(storages, file.outputStream())
+        val decoded = ion.decode<List<Storage>>(file.inputStream())
 
-        assertEquals(storage, decoded)
+        assertEquals(storages, decoded)
     }
 }

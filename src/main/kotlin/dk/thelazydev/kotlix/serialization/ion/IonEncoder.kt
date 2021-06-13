@@ -3,19 +3,19 @@ package dk.thelazydev.kotlix.serialization.ion
 import com.amazon.ion.IonType
 import com.amazon.ion.IonWriter
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.descriptors.PolymorphicKind
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.encoding.AbstractEncoder
 import kotlinx.serialization.encoding.CompositeEncoder
-import kotlinx.serialization.modules.EmptySerializersModule
 import java.util.*
 
 @ExperimentalSerializationApi
-class IonEncoder(private val writer: IonWriter) : AbstractEncoder() {
+class IonEncoder(private val writer: IonWriter, config: IonConfig) : AbstractEncoder() {
 
     private var structureDescriptors = Stack<Structure>()
 
-    override val serializersModule = EmptySerializersModule
+    override val serializersModule = config.serializersModule
 
     override fun encodeBoolean(value: Boolean) = writer.writeField { writeBool(value) }
     override fun encodeByte(value: Byte) = writer.writeField { writeInt(value.toLong()) }
@@ -53,7 +53,7 @@ class IonEncoder(private val writer: IonWriter) : AbstractEncoder() {
 
         // If we are already in a struct, we need to set the field name
         structureDescriptors.peekOrNull()?.also {
-            if (it.descriptor.kind == StructureKind.CLASS) {
+            if (it.descriptor.kind == StructureKind.CLASS || it.descriptor.kind == PolymorphicKind.OPEN) {
                 writer.setFieldName(it.descriptor.getElementName(it.elementIndex))
                 it.elementIndex++
             }
@@ -74,7 +74,7 @@ class IonEncoder(private val writer: IonWriter) : AbstractEncoder() {
 
     private fun IonWriter.writeField(increaseElementIndex: Boolean = true, block: IonWriter.() -> Unit) {
         structureDescriptors.peekOrNull()?.also {
-            if (it.descriptor.kind == StructureKind.CLASS) {
+            if (it.descriptor.kind == StructureKind.CLASS || it.descriptor.kind == PolymorphicKind.OPEN) {
                 setFieldName(it.descriptor.getElementName(it.elementIndex))
                 if (increaseElementIndex) { it.elementIndex++ }
             }

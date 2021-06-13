@@ -9,12 +9,13 @@ import kotlin.test.assertEquals
 class SimpleNullableArrayTest {
 
     private val storage = NullableArrayStorage("my-uuid", arrayOf(23, null, 42))
+    private val ion = Ion()
 
     @Test
     fun `Simple non-null JSON array`() {
         val file = tempFile()
-        Ion.encodeJson(storage, file.outputStream())
-        val decoded = Ion.decode<NullableArrayStorage>(file.inputStream())
+        ion.encodeJson(storage, file.outputStream())
+        val decoded = ion.decode<NullableArrayStorage>(file.inputStream())
 
         assertEquals(storage, decoded)
     }
@@ -22,8 +23,8 @@ class SimpleNullableArrayTest {
     @Test
     fun `Simple non-null Binary array`() {
         val file = tempFile()
-        Ion.encodeBinary(storage, file.outputStream())
-        val decoded = Ion.decode<NullableArrayStorage>(file.inputStream())
+        ion.encodeBinary(storage, file.outputStream())
+        val decoded = ion.decode<NullableArrayStorage>(file.inputStream())
 
         assertEquals(storage, decoded)
     }

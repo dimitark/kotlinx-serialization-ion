@@ -9,12 +9,13 @@ import kotlin.test.assertEquals
 class SimpleNonNullTest {
 
     private val storage = Storage("uuid", "Storage00", 42)
+    private val ion = Ion()
 
     @Test
     fun `Test non-null JSON encode`() {
         val file = tempFile()
-        Ion.encodeJson(storage, file.outputStream())
-        val decoded = Ion.decode<Storage>(file.inputStream())
+        ion.encodeJson(storage, file.outputStream())
+        val decoded = ion.decode<Storage>(file.inputStream())
 
         assertEquals(storage, decoded)
     }
@@ -22,8 +23,8 @@ class SimpleNonNullTest {
     @Test
     fun `Test non-null Binary encode`() {
         val file = tempFile()
-        Ion.encodeBinary(storage, file.outputStream())
-        val decoded = Ion.decode<Storage>(file.inputStream())
+        ion.encodeBinary(storage, file.outputStream())
+        val decoded = ion.decode<Storage>(file.inputStream())
 
         assertEquals(storage, decoded)
     }

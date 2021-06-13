@@ -6,14 +6,13 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.encoding.AbstractDecoder
 import kotlinx.serialization.encoding.CompositeDecoder
-import kotlinx.serialization.modules.EmptySerializersModule
 import java.util.*
 
 @ExperimentalSerializationApi
-class IonDecoder(private val reader: IonReader) : AbstractDecoder() {
+class IonDecoder(private val reader: IonReader, config: IonConfig) : AbstractDecoder() {
     private var structureDescriptors = Stack<SerialDescriptor>()
 
-    override val serializersModule = EmptySerializersModule
+    override val serializersModule = config.serializersModule
 
     override fun decodeBoolean(): Boolean = reader.readField { booleanValue() }
     override fun decodeByte(): Byte = reader.readField { intValue().toByte() }

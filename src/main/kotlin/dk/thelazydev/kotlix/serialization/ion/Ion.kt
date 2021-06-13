@@ -6,12 +6,26 @@ import com.amazon.ion.system.IonTextWriterBuilder
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.modules.EmptySerializersModule
+import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.serializer
 import java.io.InputStream
 import java.io.OutputStream
 
+
 @ExperimentalSerializationApi
-object Ion {
+fun Ion(builder: (IonConfig.() -> Unit)? = null): IonSerializer {
+    val config = IonConfig()
+    builder?.let { config.apply(it) }
+    return IonSerializer(config)
+}
+
+@ExperimentalSerializationApi
+class IonConfig(var serializersModule: SerializersModule = EmptySerializersModule)
+
+@ExperimentalSerializationApi
+class IonSerializer(private val config: IonConfig) {
+
     inline fun <reified T> encodeBinary(value: T, outputStream: OutputStream) = encode(serializer(), value, outputStream, EncodingType.Binary)
     inline fun <reified T> encodeJson(value: T, outputStream: OutputStream) = encode(serializer(), value, outputStream, EncodingType.Json)
     inline fun <reified T> decode(inputStream: InputStream): T = decode(serializer(), inputStream)
@@ -23,7 +37,7 @@ object Ion {
         }
 
         ionWriter.use { writer ->
-            val encoder = IonEncoder(writer)
+            val encoder = IonEncoder(writer, config)
             encoder.encodeSerializableValue(serializer, value)
         }
     }
@@ -31,7 +45,7 @@ object Ion {
     fun <T> decode(deserializer: DeserializationStrategy<T>, inputStream: InputStream): T {
         IonReaderBuilder.standard().build(inputStream).use { reader ->
             reader.next()
-            val decoder = IonDecoder(reader)
+            val decoder = IonDecoder(reader, config)
             return decoder.decodeSerializableValue(deserializer)
         }
     }

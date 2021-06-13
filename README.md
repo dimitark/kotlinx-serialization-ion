@@ -1,4 +1,4 @@
-# Kotlin Serialization implementation for Amazon Ion's serialisation format
+# Kotlin Serialization implementation for Amazon Ion's serialization format
 
 ## Usage
 

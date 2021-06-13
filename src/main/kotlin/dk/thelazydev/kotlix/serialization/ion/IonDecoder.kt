@@ -4,10 +4,9 @@ import com.amazon.ion.IonReader
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.AbstractDecoder
-import kotlinx.serialization.encoding.CompositeDecoder
 
 @ExperimentalSerializationApi
-class IonDecoder(private val reader: IonReader, private val config: IonConfig, var elementsCount: Int = 0) : AbstractDecoder() {
+class IonDecoder(private val reader: IonReader, config: IonConfig) : AbstractDecoder() {
     override val serializersModule = config.serializersModule
 
     override fun decodeBoolean(): Boolean = reader.readField { booleanValue() }
@@ -25,9 +24,7 @@ class IonDecoder(private val reader: IonReader, private val config: IonConfig, v
     override fun decodeElementIndex(descriptor: SerialDescriptor) = 0
     override fun decodeNotNullMark(): Boolean = decodeBoolean()
     override fun decodeSequentially(): Boolean = true
-
-    override fun beginStructure(descriptor: SerialDescriptor): CompositeDecoder = IonDecoder(reader, config, descriptor.elementsCount)
-    override fun decodeCollectionSize(descriptor: SerialDescriptor): Int = decodeInt().also { elementsCount = it }
+    override fun decodeCollectionSize(descriptor: SerialDescriptor): Int = decodeInt()
 
     private fun <T> IonReader.readField(block: IonReader.() -> T): T {
         next()

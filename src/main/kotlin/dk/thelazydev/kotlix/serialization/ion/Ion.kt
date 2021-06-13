@@ -11,7 +11,6 @@ import kotlinx.serialization.serializer
 import java.io.InputStream
 import java.io.OutputStream
 
-
 @ExperimentalSerializationApi
 fun Ion(builder: (IonConfig.() -> Unit)? = null): IonSerializer {
     val config = IonConfig()

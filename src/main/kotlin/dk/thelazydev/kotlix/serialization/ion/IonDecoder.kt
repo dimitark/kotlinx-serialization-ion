@@ -1,12 +1,18 @@
 package dk.thelazydev.kotlix.serialization.ion
 
 import com.amazon.ion.IonReader
+import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.descriptors.PolymorphicKind
 import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.SerialKind
+import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.encoding.AbstractDecoder
 
 @ExperimentalSerializationApi
 class IonDecoder(private val reader: IonReader, config: IonConfig) : AbstractDecoder() {
+    private val objectPool = mutableListOf<Any>()
+
     override val serializersModule = config.serializersModule
 
     override fun decodeBoolean(): Boolean = reader.readField { booleanValue() }
@@ -25,6 +31,31 @@ class IonDecoder(private val reader: IonReader, config: IonConfig) : AbstractDec
     override fun decodeNotNullMark(): Boolean = decodeBoolean()
     override fun decodeSequentially(): Boolean = true
     override fun decodeCollectionSize(descriptor: SerialDescriptor): Int = decodeInt()
+
+    override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>) = when(deserializer.descriptor.kind) {
+        is StructureKind.CLASS,
+        is StructureKind.OBJECT,
+        is SerialKind.CONTEXTUAL,
+        is PolymorphicKind.SEALED,
+        is PolymorphicKind.OPEN -> decodeObject(deserializer)
+        else -> super.decodeSerializableValue(deserializer)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <T> decodeObject(deserializer: DeserializationStrategy<T>): T {
+        // Check to see if we are reading the whole object or just a reference
+        val referenceFlag = ReferenceFlag.fromBoolean(decodeBoolean())
+
+        // Find the reference in the pool and return that
+        if (referenceFlag == ReferenceFlag.ObjectReference) {
+            return objectPool[decodeInt()] as T
+        }
+
+        // Deserialize and put it in the pool
+        val value = super.decodeSerializableValue(deserializer)
+        objectPool.add(value as Any)
+        return value
+    }
 
     private fun <T> IonReader.readField(block: IonReader.() -> T): T {
         next()

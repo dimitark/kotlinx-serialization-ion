@@ -1,32 +1,15 @@
 # Kotlin Serialization implementation for Amazon Ion
 
-Serialization and deserialization to a flat binary file, using Kotlin's serialization framework. 
+Serialization and deserialization to a flat binary file, using Amazon Ion.
 
-This implementation preserves the object references.
-For example, if you have a list, where the all elements are the same object, that object will be serialized only once,
-and when deserializing, it will have a single instance.
+The binary file doesn't contain the object structure, only the raw data. 
 
-```kotlin
-private val sharedObject = Storage("shared", "Shared Storage", 100)
-private val storages = listOf(
-    sharedObject,
-    Storage("uuid", "Storage00", null),
-    sharedObject,
-    Storage("uuid-2", "Storage01", 42)
-)
+This implementation preserves the objects' references.
 
-private val ion = Ion()
+For example, if you have a list, where all the elements are the same object, that object will be serialized only once,
+and when deserializing, only one instance of that object will exist. 
 
-val file = File("...")
-ion.encode(storages, file.outputStream())
-val decoded = ion.decode<List<Storage>>(file.inputStream())
-
-decoded[0] === decoded[2] // returns true
-decoded[0] === decoded[1] // returns false
-```
-
-
-The binary file doesn't contain the object structure, only the raw data.
+For more info, check the `dk.thelazydev.kotlix.serialization.ion.SimpleLookupTableTest` test.
 
 ## Usage
 

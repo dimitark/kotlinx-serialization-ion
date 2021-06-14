@@ -21,8 +21,8 @@ val file = File("...")
 ion.encode(storages, file.outputStream())
 val decoded = ion.decode<List<Storage>>(file.inputStream())
 
-decoded[0] == decoded[2] // returns true
-decoded[0] == decoded[1] // returns false
+decoded[0] === decoded[2] // returns true
+decoded[0] === decoded[1] // returns false
 ```
 
 

@@ -44,7 +44,7 @@ class IonDecoder(private val reader: IonReader, config: IonConfig) : AbstractDec
     @Suppress("UNCHECKED_CAST")
     private fun <T> decodeObject(deserializer: DeserializationStrategy<T>): T {
         // Check to see if we are reading the whole object or just a reference
-        val referenceFlag = ReferenceFlag.fromBoolean(decodeBoolean())
+        val referenceFlag = decodeBoolean().toReferenceFlag()
 
         // Find the reference in the pool and return that
         if (referenceFlag == ReferenceFlag.ObjectReference) {

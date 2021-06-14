@@ -5,7 +5,7 @@ plugins {
     kotlin("plugin.serialization") version "1.5.10"
 }
 
-group = "org.example"
+group = "com.github.dimitark"
 version = "0.1-SNAPSHOT"
 
 repositories {

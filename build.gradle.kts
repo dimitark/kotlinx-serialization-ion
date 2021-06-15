@@ -14,8 +14,9 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.2.1")
     implementation("com.amazon.ion:ion-java:1.8.1")
+
+    api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.2.1")
 
     testImplementation(kotlin("test"))
 }

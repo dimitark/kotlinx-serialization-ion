@@ -11,6 +11,29 @@ and when deserializing, only one instance of that object will exist.
 
 For more info, check the `dk.thelazydev.kotlix.serialization.ion.SimpleLookupTableTest` test.
 
+## Adding the dependencies to your Gradle project
+
+```kotlin
+plugins {
+    ...
+    kotlin("plugin.serialization") version "1.5.10"
+    ...
+}
+
+repositories {
+    ...
+    maven { url = uri("https://jitpack.io") }
+    ...
+}
+
+dependencies {
+    ...
+    implementation("com.github.dimitark:kotlinx-serialization-ion:0.1.3")
+    ...
+}
+
+```
+
 ## Usage
 
 ```kotlin

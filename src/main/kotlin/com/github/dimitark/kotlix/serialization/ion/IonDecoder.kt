@@ -3,9 +3,7 @@ package com.github.dimitark.kotlix.serialization.ion
 import com.amazon.ion.IonReader
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.descriptors.PolymorphicKind
 import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.SerialKind
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.encoding.AbstractDecoder
 
@@ -34,10 +32,7 @@ class IonDecoder(private val reader: IonReader, config: IonConfig) : AbstractDec
 
     override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>) = when(deserializer.descriptor.kind) {
         is StructureKind.CLASS,
-        is StructureKind.OBJECT,
-        is SerialKind.CONTEXTUAL,
-        is PolymorphicKind.SEALED,
-        is PolymorphicKind.OPEN -> decodeObject(deserializer)
+        is StructureKind.OBJECT -> decodeObject(deserializer)
         else -> super.decodeSerializableValue(deserializer)
     }
 

@@ -38,10 +38,7 @@ class IonEncoder(private val writer: IonWriter, config: IonConfig) : AbstractEnc
 
     override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) = when(serializer.descriptor.kind) {
         is StructureKind.CLASS,
-        is StructureKind.OBJECT,
-        is SerialKind.CONTEXTUAL,
-        is PolymorphicKind.SEALED,
-        is PolymorphicKind.OPEN -> encodeObject(serializer, value)
+        is StructureKind.OBJECT -> encodeObject(serializer, value)
         else -> super.encodeSerializableValue(serializer, value)
     }
 

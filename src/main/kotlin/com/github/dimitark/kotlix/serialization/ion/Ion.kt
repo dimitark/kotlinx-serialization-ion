@@ -10,9 +10,9 @@ import java.io.InputStream
 import java.io.OutputStream
 
 @ExperimentalSerializationApi
-class Ion(builder: (com.github.dimitark.kotlix.serialization.ion.IonConfig.() -> Unit)? = null) {
+class Ion(builder: (IonConfig.() -> Unit)? = null) {
 
-    private val config = com.github.dimitark.kotlix.serialization.ion.IonConfig().apply {
+    private val config = IonConfig().apply {
         builder?.let { apply(it) }
     }
 
@@ -21,14 +21,14 @@ class Ion(builder: (com.github.dimitark.kotlix.serialization.ion.IonConfig.() ->
 
     fun <T> encode(serializer: SerializationStrategy<T>, value: T, outputStream: OutputStream) {
         IonBinaryWriterBuilder.standard().build(outputStream).use { writer ->
-            val encoder = com.github.dimitark.kotlix.serialization.ion.IonEncoder(writer, config)
+            val encoder = IonEncoder(writer, config)
             encoder.encodeSerializableValue(serializer, value)
         }
     }
 
     fun <T> decode(deserializer: DeserializationStrategy<T>, inputStream: InputStream): T {
         IonReaderBuilder.standard().build(inputStream).use { reader ->
-            val decoder = com.github.dimitark.kotlix.serialization.ion.IonDecoder(reader, config)
+            val decoder = IonDecoder(reader, config)
             return decoder.decodeSerializableValue(deserializer)
         }
     }

@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
     // ...
-    implementation("com.github.dimitark:kotlinx-serialization-ion:0.1.5")
+    implementation("com.github.dimitark:kotlinx-serialization-ion:0.1.6")
     // ...
 }
 
@@ -52,5 +52,5 @@ ion.encode(storage, file.outputStream())
 
 // Decode
 val file = File("...")
-val decoded = Ion.decode<Storage>(file.inputStream())
+val decoded = try { Ion.decode<Storage>(file.inputStream()) } catch(e: IntegrityCheckException) {}
 ```

@@ -52,5 +52,5 @@ ion.encode(storage, file.outputStream())
 
 // Decode
 val file = File("...")
-val decoded = try { Ion.decode<Storage>(file.inputStream()) } catch(e: IntegrityCheckException) { null }
+val decoded = try { ion.decode<Storage>(file.inputStream()) } catch(e: IntegrityCheckException) { null }
 ```

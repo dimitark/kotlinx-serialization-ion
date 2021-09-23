@@ -10,7 +10,9 @@ import kotlinx.serialization.serializer
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.*
+import kotlin.reflect.typeOf
 
+@ExperimentalStdlibApi
 @ExperimentalSerializationApi
 class Ion(builder: (IonConfig.() -> Unit)? = null) {
     private val contextualDescriptors = setOf(SerialKind.CONTEXTUAL, PolymorphicKind.OPEN)
@@ -21,6 +23,7 @@ class Ion(builder: (IonConfig.() -> Unit)? = null) {
 
     inline fun <reified T> encode(value: T, outputStream: OutputStream) = encode(serializer(), value, outputStream)
     inline fun <reified T> decode(inputStream: InputStream): T = decode(serializer(), inputStream)
+    inline fun <reified T> structureHash(): Int = structureHash(serializer(typeOf<T>()) as DeserializationStrategy<T>)
 
     fun <T> encode(serializer: SerializationStrategy<T>, value: T, outputStream: OutputStream) {
         IonBinaryWriterBuilder.standard().build(outputStream).use { writer ->
@@ -50,6 +53,8 @@ class Ion(builder: (IonConfig.() -> Unit)? = null) {
             return decoder.decodeSerializableValue(deserializer)
         }
     }
+
+    fun <T> structureHash(deserializer: DeserializationStrategy<T>): Int = calculateStructureHash(deserializer.descriptor)
 
     private fun calculateStructureHash(descriptor: SerialDescriptor): Int {
         // String representation of the descriptors

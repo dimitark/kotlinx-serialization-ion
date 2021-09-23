@@ -10,6 +10,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotSame
 import kotlin.test.assertSame
 
+@ExperimentalStdlibApi
 @ExperimentalSerializationApi
 class ComplexDataTest {
     private val parentItem1 = ParentItem("parent1", 1)

@@ -6,6 +6,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@ExperimentalStdlibApi
 @ExperimentalSerializationApi
 class NestedObjectsTest {
     private val root = Root("root", listOf(Child(0), Child(1), Child(2)))

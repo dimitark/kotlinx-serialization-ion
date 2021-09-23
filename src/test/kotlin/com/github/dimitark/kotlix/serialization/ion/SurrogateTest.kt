@@ -10,6 +10,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@ExperimentalStdlibApi
 @ExperimentalSerializationApi
 class SurrogateTest {
 

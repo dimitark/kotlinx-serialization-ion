@@ -9,6 +9,7 @@ import kotlinx.serialization.modules.subclass
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
+@ExperimentalStdlibApi
 @ExperimentalSerializationApi
 class IntegrityCheckTest {
 

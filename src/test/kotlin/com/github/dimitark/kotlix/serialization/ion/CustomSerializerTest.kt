@@ -6,6 +6,7 @@ import java.time.ZonedDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@ExperimentalStdlibApi
 @ExperimentalSerializationApi
 class CustomSerializerTest {
 

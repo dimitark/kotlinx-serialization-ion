@@ -11,6 +11,7 @@ import kotlinx.serialization.modules.subclass
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@ExperimentalStdlibApi
 @ExperimentalSerializationApi
 class OpenPolymorphismTest {
     private val persons = listOf(

@@ -7,6 +7,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotSame
 import kotlin.test.assertSame
 
+@ExperimentalStdlibApi
 @ExperimentalSerializationApi
 class SimpleLookupTableTest {
     private val sharedObject = Storage("shared", "Shared Storage", 100)

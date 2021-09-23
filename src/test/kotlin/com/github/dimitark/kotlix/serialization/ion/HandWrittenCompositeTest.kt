@@ -12,6 +12,7 @@ import kotlinx.serialization.encoding.encodeStructure
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@ExperimentalStdlibApi
 @ExperimentalSerializationApi
 class HandWrittenCompositeTest {
 

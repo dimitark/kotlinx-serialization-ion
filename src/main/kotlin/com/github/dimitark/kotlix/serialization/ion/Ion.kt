@@ -13,6 +13,7 @@ import java.math.BigInteger
 import java.nio.CharBuffer
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
+import java.util.*
 import kotlin.reflect.typeOf
 
 
@@ -63,32 +64,46 @@ class Ion(builder: (IonConfig.() -> Unit)? = null) {
     private fun calculateStructureHash(descriptor: SerialDescriptor): String {
         // String representation of the descriptors
         val descriptors = mutableListOf<String>()
+        val contextDescriptors = TreeSet<String>()
 
         // Once we visit a contextual descriptor, we put it here, so we don't re-visit it
         // because we might end up in a infinite recursion
         val visitedContextualDescriptors = mutableSetOf<SerialDescriptor>()
 
-        visitDescriptors(descriptor, descriptors, visitedContextualDescriptors)
-        return descriptors.md5()
+        visitDescriptors(descriptor, descriptors, contextDescriptors, visitedContextualDescriptors, false)
+        return (descriptors to contextDescriptors).md5()
     }
 
-    private fun visitDescriptors(descriptor: SerialDescriptor, descriptors: MutableList<String>, visitedContextualDescriptors: MutableSet<SerialDescriptor>) {
-        descriptors.add(descriptor.toString())
+    private fun visitDescriptors(descriptor: SerialDescriptor,
+                                 descriptors: MutableList<String>,
+                                 contextDescriptors: MutableSet<String>,
+                                 visitedContextualDescriptors: MutableSet<SerialDescriptor>,
+                                 isContextualDescriptor: Boolean) {
+
+        when(isContextualDescriptor) {
+            true -> contextDescriptors.add(descriptor.toString())
+            false -> descriptors.add(descriptor.toString())
+        }
 
         // For Context descriptor, we need to additionally get the child descriptors from the context
         if (descriptor.kind in contextualDescriptors && descriptor !in visitedContextualDescriptors) {
             visitedContextualDescriptors.add(descriptor)
 
-            config.serializersModule.getContextualDescriptor(descriptor)?.let { visitDescriptors(it, descriptors, visitedContextualDescriptors) }
-            config.serializersModule.getPolymorphicDescriptors(descriptor).forEach { visitDescriptors(it, descriptors, visitedContextualDescriptors) }
+            config.serializersModule.getContextualDescriptor(descriptor)?.let {
+                visitDescriptors(it, descriptors, contextDescriptors, visitedContextualDescriptors, true)
+            }
+
+            config.serializersModule.getPolymorphicDescriptors(descriptor).forEach {
+                visitDescriptors(it, descriptors, contextDescriptors, visitedContextualDescriptors, true)
+            }
         }
 
         for (i in 0 until descriptor.elementsCount) {
-            visitDescriptors(descriptor.getElementDescriptor(i), descriptors, visitedContextualDescriptors)
+            visitDescriptors(descriptor.getElementDescriptor(i), descriptors, contextDescriptors, visitedContextualDescriptors, false)
         }
     }
 
-    private fun List<String>.md5(): String {
+    private fun Pair<List<String>, Set<String>>.md5(): String {
         val digest = MessageDigest.getInstance("MD5")
         digest.update(byteArray())
         val md5 = digest.digest()
@@ -96,9 +111,10 @@ class Ion(builder: (IonConfig.() -> Unit)? = null) {
         return BigInteger(1, md5).toString(16)
     }
 
-    private fun List<String>.byteArray(): ByteArray {
+    private fun Pair<List<String>, Set<String>>.byteArray(): ByteArray {
         val stringBuffer = StringBuffer()
-        forEach { stringBuffer.append(it) }
+        first.forEach { stringBuffer.append(it) }
+        second.forEach { stringBuffer.append(it) }
 
         val encoder = StandardCharsets.UTF_8.newEncoder()
         val charBuffer = CharBuffer.wrap(stringBuffer)

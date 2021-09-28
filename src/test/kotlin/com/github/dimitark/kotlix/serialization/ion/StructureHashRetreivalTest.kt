@@ -16,7 +16,7 @@ class StructureHashRetrievalTest {
     fun `Test structure hash retrieval`() {
         val ion = Ion()
         val hash = ion.structureHash<SimpleStorage>()
-        assertEquals("cb5b67a7a1f22f8690e49f6b55fce022", hash)
+        assertEquals(405909462, hash)
     }
 
     @Test
@@ -31,7 +31,7 @@ class StructureHashRetrievalTest {
         }
 
         val hash = ion.structureHash<PolymorphicDB>()
-        assertEquals("77f089a58b4483407ed3da22a9c37fdb", hash)
+        assertEquals(-1831096579, hash)
     }
 }
 

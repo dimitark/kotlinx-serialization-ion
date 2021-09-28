@@ -13,7 +13,7 @@ class StructureHashRetrievalTest {
     fun `Test structure hash retrieval`() {
         val ion = Ion()
         val hash = ion.structureHash<SimpleStorage>()
-        assertEquals(2069011805, hash)
+        assertEquals("cb5b67a7a1f22f8690e49f6b55fce022", hash)
     }
 }
 

@@ -16,7 +16,7 @@ For more info, check the `dk.thelazydev.kotlix.serialization.ion.SimpleLookupTab
 ```kotlin
 plugins {
     // ....
-    kotlin("plugin.serialization") version "1.5.10"
+    kotlin("plugin.serialization") version "1.8.10"
     // ...
 }
 
@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
     // ...
-    implementation("com.github.dimitark:kotlinx-serialization-ion:0.1.6")
+    implementation("com.github.dimitark:kotlinx-serialization-ion:0.1.12")
     // ...
 }
 

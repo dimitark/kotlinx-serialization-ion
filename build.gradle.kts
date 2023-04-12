@@ -6,10 +6,22 @@ plugins {
 }
 
 group = "com.github.dimitark"
-version = "0.1.13"
+version = "0.1.14"
 
 repositories {
     mavenCentral()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "com.github.dimitark"
+            artifactId = "kotlinx-serialization-ion"
+            version = "0.1.14"
+
+            from(components["java"])
+        }
+    }
 }
 
 dependencies {

@@ -21,6 +21,8 @@ class Ion(builder: (IonConfig.() -> Unit)? = null) {
 
     inline fun <reified T> encode(value: T, outputStream: OutputStream) = encode(serializer(), value, outputStream)
     inline fun <reified T> decode(inputStream: InputStream): T = decode(serializer(), inputStream)
+
+    @Suppress("UNCHECKED_CAST")
     inline fun <reified T> structureHash(): Int = structureHash(serializer(typeOf<T>()) as DeserializationStrategy<T>)
 
     fun <T> encode(serializer: SerializationStrategy<T>, value: T, outputStream: OutputStream) {

@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
     // ...
-    implementation("com.github.dimitark:kotlinx-serialization-ion:0.1.12")
+    implementation("com.github.dimitark:kotlinx-serialization-ion:0.1.13")
     // ...
 }
 

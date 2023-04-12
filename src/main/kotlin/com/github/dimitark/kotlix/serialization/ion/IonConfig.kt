@@ -5,4 +5,4 @@ import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 
 @ExperimentalSerializationApi
-class IonConfig(var serializersModule: SerializersModule = EmptySerializersModule)
+class IonConfig(var serializersModule: SerializersModule = EmptySerializersModule())
